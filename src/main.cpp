@@ -10,7 +10,7 @@ int main()
     // Initialize CURL globally
     curl_global_init(CURL_GLOBAL_ALL);
 
-    ConfigStruct *config = parse_config("data/booking_configs/massara.json");
+    ConfigStruct *config = parse_config("data/booking_configs/booking_config.json");
 
     if (config)
     {

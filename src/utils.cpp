@@ -61,7 +61,7 @@ void countdown(ConfigStruct *config)
                       << std::setfill('0') << std::setw(2) << seconds << "."
                       << std::setfill('0') << std::setw(3) << milliseconds << " seconds" << std::flush;
 
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            std::this_thread::sleep_for(std::chrono::milliseconds(50));
         }
         std::cout << "\rRelease time reached!                                   \n";
     }
