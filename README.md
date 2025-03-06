@@ -21,12 +21,23 @@ This application helps automate the process of securing restaurant reservations 
 - libcurl
 - nlohmann::json
 
+## Handling Captcha
+
+There are two ways to handle captchas, if the reservation requires them.
+
+### Locally Hosted Captcha Solver
+
+You can run [this python solver](https://github.com/sarperavci/GoogleRecaptchaBypass/tree/selenium) on a local flask server. The bot will query the server for a captcha token when needed. You will need to change the IP and port to your own configuration specifications.
+
+### Using a third-party Captcha Solver
+
+There exists a few third-party captcha solving service APIs. Included in this source is an untested and incomplete implementation of 2captcha's API.
 
 ## Installation
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/resy-bot.git
+git clone https://github.com/afan2g/resy-bot.git
 cd resy-bot
 ```
 
@@ -41,6 +52,26 @@ cmake ..
 ```bash
 make
 ```
+
+## Booking Paramters
+
+Several booking parameters are needed to preprocess your reservation. You should use the network monitor to obtain the response data. Below are the routes where you can find the data required.
+
+|Key|Value|Route|
+|-|-|-|
+|**"venueId"**|The restaurant's resy venue id||
+|**"venueName"**|The name of the restaurant||
+|**"timeslot"**|Your desired timeslot||
+|**"partySize"**|The size of your party||
+|**"template"**|The template of the booking you want to make|api.resy.com/4/find?=|
+|**"service_type_id"**|Resy service type|api.resy.com/4/find?=|
+|**"active"**|Enables/disables scheduler||
+|**"is_paid"**|If the booking requires a credit card|api.resy.com/4/find?=|
+|**"feature_recaptcha"**|If the booking requires a captcha|api.resy.com/4/find?=|
+|**"daysInAdvance"**|How many days out reservations release|
+|**"type"**|What type of seating arrangement|api.resy.com/4/find?=|
+|**"releaseHour"**, **"releaseMinute"**, **"releaseSecond"**|The at which time reservations are released|
+|**"struct_payment_method"**|The payment method to use, if "is_paid" is true|api.resy.com/2/user|
 
 ## Usage
 
@@ -64,22 +95,6 @@ make
   "struct_payment_method": "{\"id\":12345678}"
 }
 ```
-
-|Key|Value|
-|-|-|
-|"venueId"|The restaurant's resy venue id|
-|"venueName"|The name of the restaurant|
-|"timeslot"|Your desired timeslot|
-|"partySize"|The size of your party|
-|"template"|The template of the booking you want to make|
-|"service_type_id"|Resy service type|
-|"active"|Enables/disables scheduler|
-|"is_paid"|If the booking requires a credit card|
-|"feature_recaptcha"|If the booking requires a captcha|
-|"daysInAdvance"|How many days out reservations release|
-|"type"|What type of seating arrangement|
-|"releaseHour", "releaseMinute", "releaseSecond"|The time reservations release at|
-|"struct_payment_method"|The payment method to use, if "is_paid" is true|
 
 2. Configure your API headers in `data/headers/`:
    - `GET-slots.json`
