@@ -1,0 +1,18 @@
+#Executables
+*.exe
+*.out
+*.app
+
+#Build directory
+build/
+
+#CMake files
+CMakeFiles/
+
+#IDE files
+.vscode/
+
+#data
+data/
+
+resyBot.cpp
