@@ -21,32 +21,6 @@ This application helps automate the process of securing restaurant reservations 
 - libcurl
 - nlohmann::json
 
-## Project Structure
-
-```
-resy-booking/
-├── include/                  # Header files
-│   ├── config.h              # Configuration structures and functions
-│   ├── http.h                # HTTP request handling and CURL wrappers
-│   ├── utils.h               # Utility functions
-│   └── captcha.h             # Captcha handling functionality
-├── src/                      # Source files
-│   ├── config.cpp            # Configuration parsing implementation
-│   ├── http.cpp              # HTTP request implementation
-│   ├── utils.cpp             # Utility functions implementation
-│   ├── captcha.cpp           # Captcha service implementation
-│   └── main.cpp              # Main application entry point
-├── data/                     # Data files
-│   ├── headers/              # HTTP headers for various requests
-│   │   ├── GET-slots.json
-│   │   ├── POST-rgs.json
-│   │   └── POST-booking.json
-│   └── booking_configs/      # Booking configuration files
-│       └── massara.json      # Specific venue configuration
-├── build/                    # Build output directory
-├── CMakeLists.txt            # CMake configuration
-└── README.md                 # This file
-```
 
 ## Installation
 
@@ -90,6 +64,22 @@ make
   "struct_payment_method": "{\"id\":12345678}"
 }
 ```
+
+|Key|Value|
+|-|-|
+|"venueId"|The restaurant's resy venue id|
+|"venueName"|The name of the restaurant|
+|"timeslot"|Your desired timeslot|
+|"partySize"|The size of your party|
+|"template"|The template of the booking you want to make|
+|"service_type_id"|Resy service type|
+|"active"|Enables/disables scheduler|
+|"is_paid"|If the booking requires a credit card|
+|"feature_recaptcha"|If the booking requires a captcha|
+|"daysInAdvance"|How many days out reservations release|
+|"type"|What type of seating arrangement|
+|"releaseHour", "releaseMinute", "releaseSecond"|The time reservations release at|
+|"struct_payment_method"|The payment method to use, if "is_paid" is true|
 
 2. Configure your API headers in `data/headers/`:
    - `GET-slots.json`
