@@ -12,9 +12,10 @@ int main()
 
     ConfigStruct *config = parse_config("data/booking_configs/tatiana.json");
 
-    if (config)
+    print_config(config);
+
+    if (config->is_active)
     {
-        print_config(config);
         std::cout << "current time UTC: " << std::chrono::system_clock::now() << "\n";
         std::cout << "release time UTC: " << config->release_time_point << "\n";
         std::cout << "captcha fetch time UTC: " << config->release_time_point - std::chrono::seconds(60) << "\n";
@@ -26,6 +27,10 @@ int main()
         std::thread countdown_thread(countdown, config);
         wait_thread.join();
         countdown_thread.join();
+    }
+    else
+    {
+        std::cout << "Config is not active\n";
     }
     delete config;
     curl_global_cleanup();
