@@ -13,7 +13,7 @@ struct MemoryStruct
 // Function declarations
 struct curl_slist *headers(const std::string &filename);
 MemoryStruct *get_slots(const std::string &day, int party_size, int venue_id);
-MemoryStruct *get_book_token(const ConfigStruct *config);
+MemoryStruct *get_book_token(const ConfigStruct *config, const std::string &captcha_token = "");
 MemoryStruct *place_booking(const ConfigStruct *config, const std::string &book_token);
 std::string parse_book_token_value(MemoryStruct *response);
 void print_response_timing(CURL *curl);

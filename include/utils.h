@@ -6,6 +6,7 @@
 
 void countdown(ConfigStruct *config);
 void wait_until_prefetch(ConfigStruct *config);
+void wait_until_captcha(ConfigStruct *config);
 std::string read_file(const std::string &filename);
 
 #endif // UTILS_H

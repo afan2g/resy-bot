@@ -27,15 +27,11 @@ void print_config(const ConfigStruct *config)
 // Parse the configuration JSON file and return a pointer to a ConfigStruct.
 ConfigStruct *parse_config(const std::string &filename)
 {
-    std::string data = read_file(filename);
-    if (data.empty())
-    {
-        return nullptr;
-    }
     ConfigStruct *config = new ConfigStruct();
 
-    std::ifstream f(filename);
+    std::ifstream f(filename, std::ios::in);
     nlohmann::json json_data = nlohmann::json::parse(f);
+    f.close();
 
     config->venue_id = json_data["venueId"];
     config->venue_name = json_data["venueName"];
@@ -52,7 +48,7 @@ ConfigStruct *parse_config(const std::string &filename)
     config->service_type_id = json_data["service_type_id"];
 
     std::chrono::system_clock::time_point target_tp = config->release_time_point + std::chrono::days(config->days_in_advance);
-    config->prefetch_time_point = target_tp - std::chrono::minutes(3);
+    config->prefetch_time_point = config->release_time_point - std::chrono::minutes(3);
     config->target_date = std::format("{:%Y-%m-%d}", target_tp);
     std::string rgs_buffer = "rgs://resy/" + std::to_string(config->venue_id) + "/" +
                              std::to_string(config->template_id) + "/" +

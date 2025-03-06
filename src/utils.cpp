@@ -1,5 +1,6 @@
 #include "utils.h"
 #include "http.h"
+#include "captcha.h"
 #include <iostream>
 #include <fstream>
 #include <iomanip>
@@ -87,6 +88,34 @@ void wait_until_prefetch(ConfigStruct *config)
     {
         std::cout << "failed to place booking\n";
     }
+    delete booking_response;
+    return;
+}
+
+void wait_until_captcha(ConfigStruct *config)
+{
+    // prefetch captcha
+    std::this_thread::sleep_until(config->release_time_point - std::chrono::seconds(60));
+    std::string captcha_token = get_captcha_from_local();
+    std::cout << "Captcha token: " << captcha_token << "\n";
+
+    // wait until release time
+    std::this_thread::sleep_until(config->release_time_point);
+
+    // get book token
+    MemoryStruct *response = get_book_token(config, captcha_token);
+    std::string book_token = parse_book_token_value(response);
+    MemoryStruct *booking_response = place_booking(config, book_token);
+    if (booking_response)
+    {
+        write_response_to_file(booking_response->memory, "booking-response.json");
+    }
+    else
+    {
+        std::cout << "failed to place booking\n";
+    }
+
+    delete response;
     delete booking_response;
     return;
 }

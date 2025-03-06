@@ -136,7 +136,7 @@ MemoryStruct *get_slots(const std::string &day, int party_size, int venue_id)
 }
 
 // Get a booking token by sending a POST request
-MemoryStruct *get_book_token(const ConfigStruct *config)
+MemoryStruct *get_book_token(const ConfigStruct *config, const std::string &captcha_token)
 {
     struct curl_slist *headers_list = headers("data/headers/POST-rgs.json");
     if (!headers_list)
@@ -147,26 +147,26 @@ MemoryStruct *get_book_token(const ConfigStruct *config)
 
     MemoryStruct *chunk = new MemoryStruct();
     chunk->memory = "";
-    const char url[] = "https://api.resy.com/3/details";
+    std::string url = "https://api.resy.com/3/details";
 
     int commit = 1;
     std::string post_body;
 
-    if (config->feature_recaptcha)
+    nlohmann::json json_object = {
+        {"config_id", config->rgs_string},
+        {"commit", commit},
+    };
+    if (!captcha_token.empty())
     {
-        std::string captcha_token = get_captcha_from_local();
-        post_body = "{\"captcha_token\": \"" + captcha_token +
-                    "\", \"commit\": " + std::to_string(commit) +
-                    ", \"config_id\": \"" + config->rgs_string + "\"}";
+        json_object["captcha_token"] = captcha_token;
     }
-    else
+    else if (config->feature_recaptcha)
     {
-        post_body = "{\"commit\": " + std::to_string(commit) +
-                    ", \"config_id\": \"" + config->rgs_string + "\"}";
+        json_object["captcha_token"] = get_captcha_from_local();
     }
 
+    post_body = json_object.dump();
     std::cout << "post body: " << post_body << "\n";
-    const char *post_body_cstr = post_body.c_str();
 
     CURL *curl = curl_easy_init();
     CURLcode res;
@@ -174,9 +174,9 @@ MemoryStruct *get_book_token(const ConfigStruct *config)
     if (curl)
     {
         curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_easy_setopt(curl, CURLOPT_URL, url);
+        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers_list);
-        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, post_body_cstr);
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, post_body.c_str());
         curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, "");
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)(&chunk->memory));
