@@ -59,19 +59,19 @@ Several booking parameters are needed to preprocess your reservation. You should
 
 |Key|Value|Route|
 |-|-|-|
-|**"venueId"**|The restaurant's resy venue id||
-|**"venueName"**|The name of the restaurant||
-|**"timeslot"**|Your desired timeslot||
-|**"partySize"**|The size of your party||
-|**"template"**|The template of the booking you want to make|api.resy.com/4/find?=|
-|**"service_type_id"**|Resy service type|api.resy.com/4/find?=|
-|**"active"**|Enables/disables scheduler||
-|**"is_paid"**|If the booking requires a credit card|api.resy.com/4/find?=|
-|**"feature_recaptcha"**|If the booking requires a captcha|api.resy.com/4/find?=|
-|**"daysInAdvance"**|How many days out reservations release|
-|**"type"**|What type of seating arrangement|api.resy.com/4/find?=|
-|**"releaseHour"**, **"releaseMinute"**, **"releaseSecond"**|The at which time reservations are released|
-|**"struct_payment_method"**|The payment method to use, if "is_paid" is true|api.resy.com/2/user|
+|**venueId**|The restaurant's resy venue id||
+|**venueName**|The name of the restaurant||
+|**timeslot**|Your desired timeslot||
+|**partySize**|The size of your party||
+|**template**|The booking template|api.resy.com/4/find?=|
+|**service_type_id**|Resy service type|api.resy.com/4/find?=|
+|**active**|Enables/disables scheduler||
+|**is_paid**|If the booking requires a credit card|api.resy.com/4/find?=|
+|**feature_recaptcha**|If the booking requires a captcha|api.resy.com/4/find?=|
+|**daysInAdvance**|How many days out reservations release||
+|**type**|The type of seating arrangement|api.resy.com/4/find?=|
+|**releaseHour**, **releaseMinute**, **releaseSecond**|The time reservations are released|
+|**struct_payment_method**|The payment method to use|api.resy.com/2/user|
 
 ## Usage
 
