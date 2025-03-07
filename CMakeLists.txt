@@ -17,15 +17,9 @@ FetchContent_Declare(
     GIT_TAG v3.11.2
 )
 
-# Download and configure cJSON
-FetchContent_Declare(
-    cjson
-    GIT_REPOSITORY https://github.com/DaveGamble/cJSON.git
-    GIT_TAG v1.7.15
-)
 
 # Make both libraries available
-FetchContent_MakeAvailable(json cjson)
+FetchContent_MakeAvailable(json)
 
 # Include directories
 include_directories(include)
@@ -43,7 +37,6 @@ add_executable(resy_bot
 target_link_libraries(resy_bot
     PRIVATE
     CURL::libcurl
-    cjson
     nlohmann_json::nlohmann_json
 )
 
@@ -53,16 +46,6 @@ add_custom_command(TARGET resy_bot POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/data/headers
     COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/data/booking_configs
 )
-
-# # Copy configuration files from source to binary directory
-# add_custom_command(TARGET resy_bot POST_BUILD
-#     COMMAND ${CMAKE_COMMAND} -E copy_directory 
-#             ${CMAKE_SOURCE_DIR}/data/headers
-#             ${CMAKE_BINARY_DIR}/data/headers
-#     COMMAND ${CMAKE_COMMAND} -E copy_directory 
-#             ${CMAKE_SOURCE_DIR}/data/booking_configs
-#             ${CMAKE_BINARY_DIR}/data/booking_configs
-# )
 
 # Documentation message
 message(STATUS "Build configuration complete. After building, run from the build directory.")

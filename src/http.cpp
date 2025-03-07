@@ -4,7 +4,6 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
-#include <cjson/cJSON.h>
 #include <nlohmann/json.hpp>
 
 // This callback is used by libcurl to write incoming data into our std::string
