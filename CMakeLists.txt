@@ -54,15 +54,15 @@ add_custom_command(TARGET resy_bot POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/data/booking_configs
 )
 
-# Copy configuration files from source to binary directory
-add_custom_command(TARGET resy_bot POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory 
-            ${CMAKE_SOURCE_DIR}/data/headers
-            ${CMAKE_BINARY_DIR}/data/headers
-    COMMAND ${CMAKE_COMMAND} -E copy_directory 
-            ${CMAKE_SOURCE_DIR}/data/booking_configs
-            ${CMAKE_BINARY_DIR}/data/booking_configs
-)
+# # Copy configuration files from source to binary directory
+# add_custom_command(TARGET resy_bot POST_BUILD
+#     COMMAND ${CMAKE_COMMAND} -E copy_directory 
+#             ${CMAKE_SOURCE_DIR}/data/headers
+#             ${CMAKE_BINARY_DIR}/data/headers
+#     COMMAND ${CMAKE_COMMAND} -E copy_directory 
+#             ${CMAKE_SOURCE_DIR}/data/booking_configs
+#             ${CMAKE_BINARY_DIR}/data/booking_configs
+# )
 
 # Documentation message
 message(STATUS "Build configuration complete. After building, run from the build directory.")

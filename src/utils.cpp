@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <thread>
 #include <chrono>
+#include <nlohmann/json.hpp>
 
 #define LATENCY_OFFSET 15
 
@@ -118,6 +119,64 @@ void wait_until_captcha(ConfigStruct *config)
     delete response;
     delete booking_response;
     return;
+}
+
+void wait_for_slots(ConfigStruct *config)
+{
+    std::this_thread::sleep_until(config->release_time_point);
+    std::cout << "Release time reached, retrieving slots...\n";
+
+    MemoryStruct *response = get_slots(config);
+
+    // Retry loop for fetching slots
+    for (int i = 0; i < 5; i++)
+    {
+        if (!response || response->memory.empty())
+        {
+            std::cerr << "Failed to get slots (null response or empty memory)\n";
+        }
+        else
+        {
+            try
+            {
+                nlohmann::json j = nlohmann::json::parse(response->memory);
+
+                // Ensure structure is valid before accessing nested fields
+                if (j.contains("results") && j["results"].contains("venues") &&
+                    !j["results"]["venues"].empty() && j["results"]["venues"][0].contains("slots") &&
+                    !j["results"]["venues"][0]["slots"].empty())
+                {
+                    std::cout << "Slots found!\n";
+                    break; // Exit loop if slots are found
+                }
+                else
+                {
+                    std::cerr << "No slots available\n";
+                }
+            }
+            catch (const nlohmann::json::parse_error &e)
+            {
+                std::cerr << "JSON parse error: " << e.what() << "\n";
+            }
+            catch (const nlohmann::json::type_error &e)
+            {
+                std::cerr << "JSON type error: " << e.what() << "\n";
+            }
+        }
+
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        response = get_slots(config); // Retry fetching slots
+    }
+
+    // Ensure response is valid before writing to file
+    if (response && !response->memory.empty())
+    {
+        write_response_to_file(response->memory, "slots-response.json");
+    }
+    else
+    {
+        std::cerr << "No valid response to write to file.\n";
+    }
 }
 
 // Read an entire file into a std::string.

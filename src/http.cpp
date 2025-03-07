@@ -78,7 +78,7 @@ struct curl_slist *headers(const std::string &filename)
 }
 
 // Get available slots (performs a GET request) and returns the response wrapped in MemoryStruct
-MemoryStruct *get_slots(const std::string &day, int party_size, int venue_id)
+MemoryStruct *get_slots(ConfigStruct *config)
 {
     struct curl_slist *headers_list = headers("data/headers/GET-slots.json");
     if (!headers_list)
@@ -90,9 +90,9 @@ MemoryStruct *get_slots(const std::string &day, int party_size, int venue_id)
     MemoryStruct *chunk = new MemoryStruct();
     chunk->memory = "";
 
-    std::string url = "https://api.resy.com/4/find?lat=0&long=0&day=" + day +
-                      "&party_size=" + std::to_string(party_size) +
-                      "&venue_id=" + std::to_string(venue_id);
+    std::string url = "https://api.resy.com/4/find?lat=0&long=0&day=" + config->target_date +
+                      "&party_size=" + std::to_string(config->party_size) +
+                      "&venue_id=" + std::to_string(config->venue_id);
 
     CURL *curl = curl_easy_init();
     CURLcode res;
