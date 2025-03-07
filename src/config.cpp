@@ -7,8 +7,6 @@
 #include <nlohmann/json.hpp>
 void print_config(const ConfigStruct *config)
 {
-    std::cout << "release_time_point: " << config->release_time_point << "\n";
-    std::cout << "target_date: " << config->target_date << "\n";
     std::cout << "venue_id: " << config->venue_id << "\n";
     std::cout << "venue_name: " << (config->venue_name.empty() ? "NULL" : config->venue_name) << "\n";
     std::cout << "party_size: " << config->party_size << "\n";
@@ -22,6 +20,8 @@ void print_config(const ConfigStruct *config)
     std::cout << "type: " << config->type << "\n";
     std::cout << "rgs: " << config->rgs_string << "\n";
     std::cout << "struct_payment_method: " << config->struct_payment_method << "\n";
+    std::cout << "release_time_point: " << config->release_time_point << "\n";
+    std::cout << "target_date: " << config->target_date << "\n";
 }
 
 // Parse the configuration JSON file and return a pointer to a ConfigStruct.

@@ -44,7 +44,8 @@ void write_response_to_file(const std::string &json_text, const std::string &fil
         std::cerr << "Failed to open file: " << filename << "\n";
         return;
     }
-    file << json_text;
+    nlohmann::json json_object = nlohmann::json::parse(json_text);
+    file << json_object.dump(4);
     if (!file)
     {
         std::cerr << "Failed to write to file: " << filename << "\n";
